@@ -1,4 +1,5 @@
 import os
+import random, json
 
 STANJE ='stanje.txt'
 
@@ -15,6 +16,7 @@ class Model:
 
     def razveljavi(self):
         # izbrise zadnji vnos
+        print('ha')
         if os.stat(STANJE).st_size != 0:
             with open(STANJE) as zgodovina:
                 lines = zgodovina.readlines()
@@ -105,7 +107,16 @@ class Model:
             print('Datoteka ne obstaja.')
 
         
-   
+    def prikazi_zgodovino(self):
+        self.osvezi_seznam() 
+        # osvezimo prikaz
+        zgo = self.seznam[-5:]
+        if len(zgo) < 5:
+            zgo = [', , , ',', , , ',', , , ',', , , ',', , , '] + zgo
+        return zgo
+
+        
+
         
 
 
