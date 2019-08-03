@@ -1,0 +1,27 @@
+%import model
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body bgcolor="#ffb3b3">
+  
+    <h1>Analiza</h1>
+    <div>V povprečju tankamo na {{analiza[0]}} km.</div>
+    <div>Gorivo se {{analiza[1]}}</div>
+    <div>Poraba avtomobila je {{analiza[2]}} l/km.</div>
+
+
+    <canvas id="myCanvas" width="200" height="100" style="border:1px solid #c3c3c3;">
+    Your browser does not support the canvas element.
+    </canvas>
+    
+    <script>
+      var canvas = document.getElementById("myCanvas");
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#FF0000";
+      ctx.fillRect(0,0,150,75);
+    </script>
+
+  </body>
+</html>

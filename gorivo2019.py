@@ -36,6 +36,23 @@ def reset():
     gorivo.reset_funkcija()
     bottle.redirect('/')
 
+@bottle.get('/prikazi_analizo/')
+def analiza():
+    zgo = gorivo.prikazi_zgodovino()
+    cena = gorivo.cena()
+    if cena > 0:
+        cena = 'je podražilo.'
+    elif cena < 0:
+        cena = 'je pocenilo.'
+    else:
+        cena = 'ni podražilo.'
+    analiza = [gorivo.km_tankamo(), cena, gorivo.poraba_avta()]
+    return bottle.template('analiza.html', gorivo = zgo, analiza = analiza)
+
+# dostop do css datotek
+@route('/<filename:path>')
+def send_static(filename):
+    return bottle.static_file(filename, root='')
 
 bottle.run(reloader=True, debug=True)
 

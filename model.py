@@ -16,7 +16,6 @@ class Model:
 
     def razveljavi(self):
         # izbrise zadnji vnos
-        print('ha')
         if os.stat(STANJE).st_size != 0:
             with open(STANJE) as zgodovina:
                 lines = zgodovina.readlines()
@@ -28,15 +27,16 @@ class Model:
     def km_tankamo(self):
         stanje_stevca = []
         for element in self.seznam:
-            element.split(',')
             stanje_stevca.append(float(element.split(',')[2]))
         n = len(stanje_stevca)
         vsota = 0
-
-        for i in range(0, n-2):
+        for i in range(0, n-1):
             vsota += (stanje_stevca[i + 1] - stanje_stevca[i])
-            
-        return round(vsota / n, 3)
+    
+        if n > 1:
+            return  round(vsota / (n - 1) , 3) 
+        else:
+            return 0
 
     def cena(self):
         if len(self.seznam) <= 1:
@@ -58,11 +58,11 @@ class Model:
             prvo_stanje = float(z.split(',')[2])
             zadnje_stanje = float(v.split(',')[2])
         
-
             tank = 0
             m = len(self.seznam)
-            for e in self.seznam[:m - 2]:
+            for e in self.seznam[:m - 1]:
                 tank += float(e.split(',')[1])
+            print (tank)
             return round(tank / (zadnje_stanje - prvo_stanje), 3)
         
     def osvezi_seznam(self):
