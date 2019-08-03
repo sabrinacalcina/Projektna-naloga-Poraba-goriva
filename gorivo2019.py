@@ -4,12 +4,7 @@ from bottle import route, run, Response, template
 
 app = bottle.default_app()
 
-#@route('/')
-#def tittle():
-#    return Response("PORABA GORIVA")
-
 gorivo = model.Model()
-
 
 @route('/')
 def index():
@@ -23,8 +18,16 @@ def vnesi():
 @bottle.get('/prikazi_zgodovino/')
 def zgodovina():
     zgo = gorivo.prikazi_zgodovino()
-    print(zgo)
-    return bottle.template('zgodovina.html', gorivo = zgo)
+    cena = gorivo.cena()
+    if cena > 0:
+        cena = 'je podražilo.'
+    elif cena < 0:
+        cena = 'je pocenilo.'
+    else:
+        cena = 'ni podražilo.'
+    analiza = [gorivo.km_tankamo(), cena, gorivo.poraba_avta()]
+    return bottle.template('zgodovina.html', gorivo = zgo, analiza = analiza)
+
 
 @bottle.get('/delete/')
 def razveljavi_zadnji():
@@ -36,25 +39,17 @@ def reset():
     gorivo.reset_funkcija()
     bottle.redirect('/')
 
-@bottle.get('/prikazi_analizo/')
-def analiza():
-    zgo = gorivo.prikazi_zgodovino()
-    cena = gorivo.cena()
-    if cena > 0:
-        cena = 'je podražilo.'
-    elif cena < 0:
-        cena = 'je pocenilo.'
-    else:
-        cena = 'ni podražilo.'
-    analiza = [gorivo.km_tankamo(), cena, gorivo.poraba_avta()]
-    return bottle.template('analiza.html', gorivo = zgo, analiza = analiza)
+@bottle.get('/kalkulator/')
+def kalkulator():
+    return bottle.template('kalkulator.html', stroski = '')
 
-# dostop do css datotek
-@route('/<filename:path>')
-def send_static(filename):
-    return bottle.static_file(filename, root='')
+@bottle.post('/kalkulator/')
+def izracunaj():
+    stroski = gorivo.izracun_stroskov({'razdalja': bottle.request.forms.get('razdalja'), 'poraba': bottle.request.forms.get('poraba'), 'cena': bottle.request.forms.get('cena')} )
+    return bottle.template('kalkulator.html', stroski = 'Rezultat ' + str(stroski) + ' €')
 
 bottle.run(reloader=True, debug=True)
+
 
 
 

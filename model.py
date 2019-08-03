@@ -11,15 +11,16 @@ class Model:
 
     def vnesi_tank(self,podatki):
         # zapise vnesene podatke v datoteko
+        podatki = '{}, {}, {}, {}\n'.format(podatki.get('datum'), podatki.get('tank'), podatki.get('stanje'), podatki.get('cena'))
         with open(STANJE, 'a') as datoteka:
-            datoteka.write('{}, {}, {}, {}\n'.format(podatki.get('datum'), podatki.get('tank'), podatki.get('stanje'), podatki.get('cena')))
+            datoteka.write(podatki)
+        self.seznam.append(podatki)
 
     def razveljavi(self):
         # izbrise zadnji vnos
         if os.stat(STANJE).st_size != 0:
-            with open(STANJE) as zgodovina:
-                lines = zgodovina.readlines()
-                lines = lines[:-1]
+            self.seznam = self.seznam[:-1]
+            lines = self.seznam
             with open(STANJE,'w') as zgodovina:
                 zgodovina.writelines([item for item in lines])
 
@@ -48,7 +49,6 @@ class Model:
             predzadnja_cena = float(p.split(',')[3])
             return round(zadnja_cena - predzadnja_cena,3)
 
-
     def poraba_avta(self):
         if len(self.seznam) <= 1:
             return 0
@@ -62,8 +62,7 @@ class Model:
             m = len(self.seznam)
             for e in self.seznam[:m - 1]:
                 tank += float(e.split(',')[1])
-            print (tank)
-            return round(tank / (zadnje_stanje - prvo_stanje), 3)
+            return round(tank * 100 / (zadnje_stanje - prvo_stanje), 3)
         
     def osvezi_seznam(self):
         self.seznam = []
@@ -83,40 +82,27 @@ class Model:
         for e in self.seznam:
             tank.append(float(e.split(',')[1]))
         return tank
-                       
-            
-              
-    def prikazi_analizo(self):
-        self.osvezi_seznam()
-        if self.seznam:
-            a = self.poraba_avta()
-            c = self.cena()
-            x = self.km_tankamo()
-            u = self.litri()
-            print(x)
-            return (x, c, a, u)
-        else:
-            return False
-
-
 
     def reset_funkcija(self):
         if os.path.exists(STANJE):
             os.remove(STANJE)
+            self.seznam = []
         else:
             print('Datoteka ne obstaja.')
 
-        
-    def prikazi_zgodovino(self):
-        self.osvezi_seznam() 
+    def prikazi_zgodovino(self): 
         # osvezimo prikaz
         zgo = self.seznam[-5:]
         if len(zgo) < 5:
             zgo = [', , , ',', , , ',', , , ',', , , ',', , , '] + zgo
         return zgo
-
+  
+    def izracun_stroskov(self, podatki):
+        razdalja = float(podatki.get('razdalja'))
+        poraba = float(podatki.get('poraba'))
+        cena = float(podatki.get('cena'))
+        return razdalja * poraba * cena / 100
         
-
         
 
 

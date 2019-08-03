@@ -1,0 +1,19 @@
+%import model
+<!DOCTYPE html>
+<html>
+
+    <body bgcolor=#FCA289>
+        <h1>Kalkulator: IZRAČUN STROŠKOV POTI</h1>
+        
+        <form action='/kalkulator/' method="POST">
+            Razdalja: <input type="number" name="razdalja" min="0" required> km<br> 
+            Poraba: <input type="number" name="poraba" required> l/100km<br>
+            Trenutna cena goriva: <input type="number" step=0.01 name="cena" min="0" required> €/l<br>
+            <input type="submit" value="Izračunaj">
+        </form>
+        <br>
+        <div> {{stroski}} </div>
+      
+
+    </body>
+</html>
