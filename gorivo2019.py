@@ -28,7 +28,6 @@ def zgodovina():
     analiza = [gorivo.km_tankamo(), cena, gorivo.poraba_avta()]
     return bottle.template('zgodovina.html', gorivo = zgo, analiza = analiza)
 
-
 @bottle.get('/delete/')
 def razveljavi_zadnji():
     gorivo.razveljavi()

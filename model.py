@@ -24,7 +24,6 @@ class Model:
             with open(STANJE,'w') as zgodovina:
                 zgodovina.writelines([item for item in lines])
 
-                
     def km_tankamo(self):
         stanje_stevca = []
         for element in self.seznam:
@@ -70,7 +69,6 @@ class Model:
             if os.stat(STANJE).st_size != 0:
                 with open(STANJE) as zgodovina:
                     for vrstica in zgodovina:
-                        #print(vrstica)
                         self.seznam.append(vrstica)
         except:
             f = open(STANJE, "w+")
